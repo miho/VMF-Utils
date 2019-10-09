@@ -1,2 +1,2 @@
 # VMF-Utils
-Utility Library for VMF
+Utility Library for <a href="https://github.com/miho/VMF">VMF</a>.
