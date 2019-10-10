@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019-2019 Michael Hoffer <info@michaelhoffer.de>. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package eu.mihosoft.vmfutils;
 
 import java.util.function.Predicate;
@@ -19,23 +34,23 @@ public interface Selector {
     }
 
     public static PropSelector selectProp() {
-        return null;
+        return new PropSelectorImpl();
     }
 
     public static StringPropSelector selectStringProp() {
-        return null;
+        return new StringPropSelectorImpl();
     }
 
     public static DoublePropSelector selectDoubleProp() {
-        return null;
+        return new DoublePropSelectorImpl();
     }
 
     public static IntegerPropSelector selectIntegerProp() {
-        return null;
+        return new IntegerPropSelectorImpl();
     }
 
     public static ListPropSelector selectListProp() {
-        return null;
+        return new ListPropSelectorImpl();
     }
 
     public Selector withProperty(Predicate<Property> propPred);

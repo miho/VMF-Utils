@@ -35,3 +35,39 @@ idea {
 // configure java build
 sourceCompatibility = '11'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    testCompile('junit:junit:4.12'){
+        exclude group: 'org.hamcrest'
+    }
+
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testCompile group: 'eu.mihosoft.vmf', name: 'vmf', version: '0.2.6.8'
+    compile group: 'eu.mihosoft.vmf', name: 'vmf-runtime', version: '0.2.6.8'
+}
+
+test {
+    testLogging {
+        // Make sure output from
+        // standard out or error is shown
+        // in Gradle output.
+        showStandardStreams = true
+    }
+}
+
+license {
+    header = rootProject.file('config/HEADER')
+    strictCheck = true
+    ignoreFailures = true
+    mapping {
+        java   = 'SLASHSTAR_STYLE'
+        groovy = 'SLASHSTAR_STYLE'
+        fxml   = 'XML_STYLE'
+    }
+
+    ext.yearCurrent  = new java.text.SimpleDateFormat("yyyy").format(new Date())
+    ext.yearSince1   = '2019'
+    ext.author1 = 'Michael Hoffer <info@michaelhoffer.de>'
+
+    exclude '**/*.svg'
+}

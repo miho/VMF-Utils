@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019-2019 Michael Hoffer <info@michaelhoffer.de>. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package eu.mihosoft.vmfutils;
 
 import java.util.ArrayList;
@@ -15,8 +30,11 @@ public interface IntegerPropSelector extends PropSelector {
     public static IntegerPropSelector selectProp() {
         return new IntegerPropSelectorImpl();
     }
-
+    
     public IntegerPropSelector withName(String name);
+    public IntegerPropSelector withType(Type type);
+    public <T> IntegerPropSelector withValueThatIsEqualTo(T value);
+    public <T> IntegerPropSelector withValueThatMatches(Predicate<T> pred);
 
     public IntegerPropSelector withValueThatIsGreaterThan(Integer value);
 
@@ -27,80 +45,37 @@ public interface IntegerPropSelector extends PropSelector {
     public IntegerPropSelector withValueThatIsLessThanOrEqualTo(Integer value);
 }
 
-class IntegerPropSelectorImpl implements IntegerPropSelector {
-
-    private final PropSelector propSel = new PropSelectorImpl();
-
-    private final List<Predicate<Property>> predicates = new ArrayList<>();
-
-    @Override
-    public PropSelector withType(Type type) {
-
-        this.propSel.withType(type);
-
-        return this;
-    }
-
-    @Override
-    public <T> PropSelector withValueThatIsEqualTo(T value) {
-
-        this.propSel.withValueThatIsEqualTo(value);
-
-        return this;
-    }
-
-    @Override
-    public <T> PropSelector withValueThatMatches(Predicate<T> pred) {
-
-        this.propSel.withValueThatMatches(pred);
-
-        return this;
-    }
-
-    @Override
-    public Predicate<Property> asPredicate() {
-
-        Predicate<Property> propPred = this.propSel.asPredicate();
-        
-        return (p)->{
-            if(!propPred.test(p)) {
-                return false;
-            }
-
-            for(Predicate<Property> pred : predicates) {
-                if(!pred.test(p)) {
-                    return false;
-                }
-            }
-
-            return true;
-        };
-    }
-
-    @Override
-    public Collection<Property> selectFrom(Collection<? extends Property> collection) {
-        return collection.stream().filter(asPredicate()).distinct().collect(Collectors.toList());
-    }
-
-    @Override
-    public Collection<Property> selectFrom(VObject vObj) {
-        return vObj.vmf().reflect().properties().
-            stream().filter(asPredicate()).distinct().
-            collect(Collectors.toList());
-    }
+class IntegerPropSelectorImpl extends PropSelectorImpl implements IntegerPropSelector {
 
     @Override
     public IntegerPropSelector withName(String name) {
-        
-        this.propSel.withName(name);
+        super.withName(name);
+        return this;
+    }
 
+    @Override
+    public IntegerPropSelector withType(Type type) {
+        super.withType(type);
+        return this;
+    }
+
+
+    @Override
+    public <T> IntegerPropSelector withValueThatIsEqualTo(T value) {
+        super.withValueThatIsEqualTo(value);
+        return this;
+    }
+
+    @Override
+    public <T> IntegerPropSelector withValueThatMatches(Predicate<T> pred){
+        super.withValueThatMatches(pred);
         return this;
     }
 
     @Override
     public IntegerPropSelector withValueThatIsGreaterThan(Integer value) {
         
-        this.predicates.add((p)->{
+        getPredicates().add((p)->{
             if(!(p.get() instanceof Integer)) {
                 return false;
             }
@@ -114,7 +89,7 @@ class IntegerPropSelectorImpl implements IntegerPropSelector {
     @Override
     public IntegerPropSelector withValueThatIsGreaterThanOrEqualTo(Integer value) {
 
-        this.predicates.add((p)->{
+        getPredicates().add((p)->{
             if(!(p.get() instanceof Integer)) {
                 return false;
             }
@@ -128,7 +103,7 @@ class IntegerPropSelectorImpl implements IntegerPropSelector {
     @Override
     public IntegerPropSelector withValueThatIsLessThan(Integer value) {
 
-        this.predicates.add((p)->{
+        getPredicates().add((p)->{
             if(!(p.get() instanceof Integer)) {
                 return false;
             }
@@ -142,7 +117,7 @@ class IntegerPropSelectorImpl implements IntegerPropSelector {
     @Override
     public IntegerPropSelector withValueThatIsLessThanOrEqualTo(Integer value) {
 
-        this.predicates.add((p)->{
+        getPredicates().add((p)->{
             if(!(p.get() instanceof Integer)) {
                 return false;
             }
