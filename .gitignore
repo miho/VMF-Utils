@@ -1,0 +1,10 @@
+# Gradle
+/build/
+/.gradle/
+/bin/
+
+# IDEs
+/.project
+/.classpath
+/.settings/
+/.vscode/

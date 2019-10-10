@@ -1,0 +1,37 @@
+// enable intellij integration
+buildscript {
+    ext.vmfPluginIntelliJIntegration = true
+}
+
+// load plugins
+plugins {
+    id "java"
+    id "eu.mihosoft.vmf" version "0.2.6.8"
+
+    id 'com.github.hierynomus.license' version '0.14.0'
+    id 'maven-publish'
+    id 'net.nemerosa.versioning' version '2.7.1'
+    id 'com.jfrog.bintray' version '1.8.4'
+    id 'com.github.ben-manes.versions' version '0.13.0'
+
+}
+
+// gradle wrapper
+wrapper {
+    gradleVersion = '5.6'
+}
+
+apply from: 'gradle/publishing.gradle'
+
+// set dependencies for intellij editor (otherwise vmf dir would be ignored)
+idea { 
+    module {
+        dependencies {
+           compile group: 'eu.mihosoft.vmf', name: 'vmf', version: "0.2.6.8"
+        }
+    }
+}
+
+// configure java build
+sourceCompatibility = '11'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
